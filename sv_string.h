@@ -68,6 +68,7 @@ char* str_to_c_str(String* s)
 {
     char* c = malloc((s->size + 1) * sizeof(char));
     strncpy(c, s->c_str, s->size);
+    c[s->size] = '\0';
     return c;
 }
 

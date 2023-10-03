@@ -23,12 +23,18 @@ char* read_file(const char* path)
     // read the file
     char* buffer = (char*)malloc(fileSize + 1);
     if (buffer == NULL) {
-        fprintf(stderr, "ERROR::FILE::MEMORY: Not enough memory to read \"%s\".\n", path);
+        fprintf(stderr, 
+                "ERROR::FILE::MEMORY: Not enough memory to read \"%s\".\n", 
+                path
+        );
         return NULL;
     }
     size_t bytesRead = fread(buffer, sizeof(char), fileSize, file);
     if (bytesRead < fileSize) {
-        fprintf(stderr, "ERROR::FILE::READ: Could not read file \"%s\".\n", path);
+        fprintf(stderr, 
+                "ERROR::FILE::READ: Could not read file \"%s\".\n", 
+                path
+        );
         return NULL;
     }
     buffer[bytesRead] = '\0';
@@ -37,5 +43,5 @@ char* read_file(const char* path)
     return buffer;
 }
 
-#endif /* ifndef UTILS_H
-#define UTILS_H */
+
+#endif
