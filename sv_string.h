@@ -27,7 +27,6 @@ String str_init(char* c)
 {
     String s;
     size_t c_len = strlen(c);
-    s.c_str = malloc((c_len + 1) * sizeof(char));
     s.c_str = c;
     s.size = c_len;
     return s;
@@ -43,7 +42,7 @@ String str_init(char* c)
  * @param end: the end of the string slice
  * @return a String containing the sliced data
  */
-String str_slice(String* s, size_t start, size_t end)
+String str_slice(const String* s, size_t start, size_t end)
 {
     size_t length = end > start ? end - start : 0;
     size_t max_length = s->size > start ? s->size - start : 0;
@@ -64,7 +63,7 @@ String str_slice(String* s, size_t start, size_t end)
  * @param s: the string to convert the data from.
  * @return a c string representation of the String s.
  */
-char* str_to_c_str(String* s)
+char* str_to_c_str(const String* s)
 {
     char* c = malloc((s->size + 1) * sizeof(char));
     strncpy(c, s->c_str, s->size);
@@ -83,7 +82,7 @@ char* str_to_c_str(String* s)
  * @param i: the location to take the char from
  * @return the char at the given location
  */
-char str_at(String* s, int i)
+char str_at(const String* s, int i)
 {
     if (i < 0) {
         i = s->size + i;
@@ -100,13 +99,13 @@ char str_at(String* s, int i)
  * @param s2: the second String
  * @return true if the strings are the same, false otherwise
  */
-bool str_comp(String* s1, String* s2)
+bool str_comp(const String* s1, const String* s2)
 {
     if (s1->size != s2->size) {
         return false;
     }
     for (int i=0; i<s1->size; i++) {
-        if (str_at(s1, i) != str_at(s2, i)) {
+        if (s1->c_str[i] != s2->c_str[i]) {
             return false;
         }
     }
@@ -119,7 +118,7 @@ bool str_comp(String* s1, String* s2)
  * @param string: the String to copy
  * @return a copy of the passed String
  */
-String* str_copy(String* string)
+String* str_copy(const String* string)
 {
     String* ss = malloc(sizeof(String));
     ss->c_str = str_to_c_str(string);
@@ -129,11 +128,45 @@ String* str_copy(String* string)
 
 
 /**
+ * Returns if the substring s2 is in s1.
+ * @param s1 the base string
+ * @param s2 the substring to search for 
+ * @return true if s2 in s1, false otherwise
+ */
+bool str_in(const String* s1, const String* s2)
+{
+    if (s2->size > s1->size) return false;
+
+    for (int i=0; i < s1->size - s2->size + 1; i++)
+    {
+        String string_slice = str_slice(s1, i, i + s2->size);
+        if (str_comp(s2, &string_slice)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+/**
+ * Returns if the substring s2 is in s1.
+ * @param s1 the base string
+ * @param s2 the substring to search for 
+ * @return true if s2 in s1, false otherwise
+ */
+bool str_cstr_in(const String* s1, char* c)
+{
+    String s2 = str_init(c);
+    return str_in(s1, &s2);
+}
+
+
+/**
  * Splits a String into a vector
  * @param c: the split separator
  * @return a vector of substrings using `c` as delimiter
  */
-Vector str_split(String* s, char* c) 
+Vector str_split(const String* s, char* c) 
 {
     Vector v = vec_init(sizeof(String));
     size_t c_length = strlen(c);

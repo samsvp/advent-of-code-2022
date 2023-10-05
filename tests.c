@@ -210,6 +210,28 @@ int main(void)
         printf("%s\n", str_to_c_str(&s));
     }
 
+    log_title("String in test");
+    {
+        String s = str_init("hello, how are you today?\n I'm fine, thanks!");
+        String s2 = str_init("hello");
+        COMP_VALUE(true, str_in(&s, &s2));
+        s2 = str_init("dsfsdg");
+        COMP_VALUE(false, str_in(&s, &s2));
+        s2 = str_init("\n");
+        COMP_VALUE(true, str_in(&s, &s2));
+        s2 = str_init("\n I'm");
+        COMP_VALUE(true, str_in(&s, &s2));
+        s2 = str_init("thanks");
+        COMP_VALUE(true, str_in(&s, &s2));
+        s2 = str_init("tranks");
+        COMP_VALUE(false, str_in(&s, &s2));
+        s2 = str_init("thanks!!");
+        COMP_VALUE(false, str_in(&s, &s2));
+        s2 = str_init("hello ");
+        COMP_VALUE(false, str_in(&s, &s2));
+        s2 = str_init(", ");
+        COMP_VALUE(true, str_in(&s, &s2));
+    }
 
     log_title("Vector tests");
     {

@@ -1,9 +1,9 @@
 #include <stdlib.h>
 
-#include "utils.h"
+#include "../utils.h"
 
-#include "sv_string.h"
-#include "sv_vector.h"
+#include "../sv_string.h"
+#include "../sv_vector.h"
 
 
 int compare (const void * a, const void * b)
